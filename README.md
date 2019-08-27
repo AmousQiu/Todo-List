@@ -8,5 +8,5 @@ Includes Three lists:
 >Social List  
 >Shopping List  
 ## Some ScreenShots
-<img src="https://github.com/AmousQiu/Todo-List/blob/master/1.jpg" width="800"/>
+<img src="https://github.com/AmousQiu/Todo-List/blob/master/1.jpg" width="100"/>
 [Download Here ;)](https://github.com/AmousQiu/Todo-List/blob/master/todotest.apk)
