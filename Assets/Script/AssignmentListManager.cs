@@ -19,7 +19,8 @@ public class AssignmentListManager : MonoBehaviour
 
     string filePath;
     //public Text ShowText;
-    string jsonName="AssignmentList.json";
+    //string jsonName = "AssignmentList.json";
+    string jsonName = "AssignmentList.txt";
     private List<AssignmentListObject> AssignmentListObjects = new List<AssignmentListObject>();
 
     public class AssignmentlistItem
@@ -28,7 +29,7 @@ public class AssignmentListManager : MonoBehaviour
 
         public int index;
 
-        
+
         public AssignmentlistItem(string name, int index)
         {
             this.objName = name;
@@ -45,8 +46,8 @@ public class AssignmentListManager : MonoBehaviour
             filePath = Application.streamingAssetsPath + "/AssignmentList.json";
          #endif
          */
-        filePath = Path.Combine(Application.persistentDataPath,jsonName);
-      
+        filePath = Path.Combine(Application.persistentDataPath, jsonName);
+
         loadJsonData();
 
     }
@@ -65,7 +66,7 @@ public class AssignmentListManager : MonoBehaviour
         string temp = input.text;
         CreateCheckListItems(temp);
         Debug.Log(temp);
-        input.text="";
+        input.text = "";
     }
 
     public void CreateCheckListItems(string name, int loadIndex = 0, bool loading = false)
@@ -91,9 +92,8 @@ public class AssignmentListManager : MonoBehaviour
         {
             saveJsonData();
         }
-        /* if(checkListObjects.Count>10){
-            showMessage();
-        }*/
+ 
+        upload();
     }
 
     void CheckItem(AssignmentListObject item)
@@ -101,6 +101,7 @@ public class AssignmentListManager : MonoBehaviour
         AssignmentListObjects.Remove(item);
         saveJsonData();
         Destroy(item.gameObject);
+        upload();
     }
 
     void saveJsonData()
@@ -113,36 +114,55 @@ public class AssignmentListManager : MonoBehaviour
             contents += JsonUtility.ToJson(temp) + "\n";
         }
         Debug.Log(filePath);
-     
-        System.IO.File.WriteAllText(filePath,contents);
-        
+
+        System.IO.File.WriteAllText(filePath, contents);
+
     }
 
+
+    public void upload()
+    {
+        string contents = "";
+        string url = "http://18.191.23.16/jsonServer/UnityUpload.php";
+        for (int i = 0; i < AssignmentListObjects.Count; i++)
+        {
+            AssignmentlistItem temp = new AssignmentlistItem(AssignmentListObjects[i].objName, AssignmentListObjects[i].index);
+            contents += JsonUtility.ToJson(temp) + "\n";
+        }
+
+        byte[] bytes = Encoding.ASCII.GetBytes(contents);
+        Debug.Log(bytes.ToString());
+
+        WWWForm form = new WWWForm();
+        form.AddField("Name","AssignmentList");
+        form.AddBinaryData("post", bytes);
+        WWW www = new WWW(url, form);
+    }
 
 
     void loadJsonData()
     {
-            string dataAsJson = "";
+        string dataAsJson = "";
 
-            dataAsJson = System.IO.File.ReadAllText(filePath);
-            UnityWebRequest www = UnityWebRequest.Get(filePath);
-            www.SendWebRequest();
-            while (!www.isDone) { }
-            if (string.IsNullOrEmpty(www.error))
-            {
-                dataAsJson = www.downloadHandler.text;
-            }
-            string[] splitContents = dataAsJson.Split('\n');
+        //dataAsJson = System.IO.File.ReadAllText(filePath);
+        UnityWebRequest www = UnityWebRequest.Get(filePath);
+        www.SendWebRequest();
+        while (!www.isDone) { }
+        if (string.IsNullOrEmpty(www.error))
+        {
+            dataAsJson = www.downloadHandler.text;
+        }
+        string[] splitContents = dataAsJson.Split('\n');
 
-            foreach (string content in splitContents)
+        foreach (string content in splitContents)
+        {
+            if (content.Trim() != "")
             {
-                if (content.Trim() != "")
-                {
-                    AssignmentlistItem temp = JsonUtility.FromJson<AssignmentlistItem>(content.Trim());
-                    CreateCheckListItems(temp.objName, temp.index, true);
-                }
+                AssignmentlistItem temp = JsonUtility.FromJson<AssignmentlistItem>(content.Trim());
+                CreateCheckListItems(temp.objName, temp.index, true);
             }
- 
+        }
+
     }
 }
 

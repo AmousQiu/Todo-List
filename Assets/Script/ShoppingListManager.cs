@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using UnityEngine.Networking;
+using System.Text;
 
 public class ShoppingListManager : MonoBehaviour
 {
@@ -38,24 +39,12 @@ public class ShoppingListManager : MonoBehaviour
 
 
         filePath = Application.persistentDataPath + "/ShoppingList.json";
-        //if(!File.Exists(filePath)){
-        //    File.Create(filePath);
-        // }else{}
+
         loadJsonData();
 
-        //input = this.GetComponent<InputField>();
-        //createButton.onClick.AddListener(delegate { CreateCheckListItems(input.text); });
     }
 
 
-    /* IEnumerator showMessage(){
-
-        ShowText.enabled=true;
-        ShowText.text="This is tooooo much";
-        yield return new WaitForSecondsRealtime(1f);
-        ShowText.enabled=false;
-        ShowText.text="";
-    }*/
     public void CreateNewItem()
     {
         string temp = input.text;
@@ -87,6 +76,7 @@ public class ShoppingListManager : MonoBehaviour
         {
             saveJsonData();
         }
+       upload();
         /* if(checkListObjects.Count>10){
             showMessage();
         }*/
@@ -97,7 +87,7 @@ public class ShoppingListManager : MonoBehaviour
         ShoppingListObjects.Remove(item);
         saveJsonData();
         Destroy(item.gameObject);
-
+        upload();
     }
 
     void saveJsonData()
@@ -110,6 +100,25 @@ public class ShoppingListManager : MonoBehaviour
             contents += JsonUtility.ToJson(temp) + "\n";
         }
         System.IO.File.WriteAllText(filePath, contents);
+    }
+
+    public void upload()
+    {
+        string contents = "";
+        string url = "http://18.191.23.16/jsonServer/UnityUpload.php";
+        for (int i = 0; i < ShoppingListObjects.Count; i++)
+        {
+            ShoppinglistItem temp = new ShoppinglistItem(ShoppingListObjects[i].objName, ShoppingListObjects[i].index);
+            contents += JsonUtility.ToJson(temp) + "\n";
+        }
+
+        byte[] bytes = Encoding.ASCII.GetBytes(contents);
+        Debug.Log(bytes.ToString());
+
+        WWWForm form = new WWWForm();
+        form.AddField("Name","ShoppingList");
+        form.AddBinaryData("post", bytes);
+        WWW www = new WWW(url, form);
     }
 
     void loadJsonData()

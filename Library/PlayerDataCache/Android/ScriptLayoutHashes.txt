@@ -1,6 +1,6 @@
 Android
 PlayerPath?
-P:/Ltp4/zqiu2_HFX-WKS-AA053_1912/Coops/ziyu.qiu/TODO-List/todotest.apk
+P:/Ltp4/zqiu2_HFX-WKS-AA053_1912/Coops/ziyu.qiu/TODO-List/todolist.apk
 SceneListBegin?
 Assets/Scenes/ShoppingList.unity
 Assets/Scenes/SocialEventList.unity

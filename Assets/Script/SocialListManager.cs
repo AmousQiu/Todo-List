@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using UnityEngine.Networking;
+using System.Text;
 
 public class SocialListManager : MonoBehaviour
 {
@@ -87,6 +88,7 @@ public class SocialListManager : MonoBehaviour
         /* if(checkListObjects.Count>10){
             showMessage();
         }*/
+        upload();
     }
 
     void CheckItem(SocialListObject item)
@@ -94,6 +96,7 @@ public class SocialListManager : MonoBehaviour
         SocialListObjects.Remove(item);
         saveJsonData();
         Destroy(item.gameObject);
+        upload();
     }
 
     void saveJsonData()
@@ -111,10 +114,27 @@ public class SocialListManager : MonoBehaviour
         sw.Write("");
         sw.WriteLine(contents);
         sw.Close();
-        
-
-
     }
+
+    public void upload()
+    {
+        string contents = "";
+        string url = "http://18.191.23.16/jsonServer/UnityUpload.php";
+        for (int i = 0; i < SocialListObjects.Count; i++)
+        {
+            SociallistItem temp = new SociallistItem(SocialListObjects[i].objName, SocialListObjects[i].index);
+            contents += JsonUtility.ToJson(temp) + "\n";
+        }
+
+        byte[] bytes = Encoding.ASCII.GetBytes(contents);
+        Debug.Log(bytes.ToString());
+
+        WWWForm form = new WWWForm();
+        form.AddField("Name","SocialList");
+        form.AddBinaryData("post", bytes);
+        WWW www = new WWW(url, form);
+    }
+
 
     void loadJsonData()
     {
