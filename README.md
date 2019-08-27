@@ -8,6 +8,6 @@ Includes Three lists:
 >Social List  
 >Shopping List  
 ## Some ScreenShots
-<img src="https://github.com/AmousQiu/Todo-List/blob/master/1.jpg" alt="todoList Screenshot" style="width:500px;">
+<img src="https://github.com/AmousQiu/Todo-List/blob/master/1.jpg" alt="todoList Screenshot" style="width:300px;">
 
 [Download Here ;)](https://github.com/AmousQiu/Todo-List/blob/master/todotest.apk)
