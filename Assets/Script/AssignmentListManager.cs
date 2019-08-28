@@ -1,4 +1,37 @@
-﻿using System.Collections;
+﻿/* 
+ * ------------------------------------------------------------------------------------------
+                                         _____ _                     _                _    _ 
+      /\                                / ____| |                   | |              | |  (_)
+     /  \   _ __ ___   ___  _   _ ___  | |    | |__   ___   ___ ___ | | _____   _____| | ___ 
+    / /\ \ | '_ ` _ \ / _ \| | | / __| | |    | '_ \ / _ \ / __/ _ \| |/ _ \ \ / / __| |/ / |
+   / ____ \| | | | | | (_) | |_| \__ \ | |____| | | | (_) | (_| (_) | | (_) \ V /\__ \   <| |
+  /_/    \_\_| |_| |_|\___/ \__,_|___/  \_____|_| |_|\___/ \___\___/|_|\___/ \_/ |___/_|\_\_|           
+                                                                                                                                                                          
+ * <AmousQiu@dal.ca> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think this stuff is
+ * worth it, you can buy me a beer in return (Personal prefer Garrison Raspberry).
+ *                                                                        @Copyright Ziyu Qiu
+ * ------------------------------------------------------------------------------------------
+ */
+
+ /*-------------------------------------------------------------------------------------------
+  *FILE INTRODUTION PART 
+  *-------------------------------------------------------------------------------------------
+  *FileName: AssignmentListManager.cs
+  *--------------------------------------------------------------------------------------------
+  *Function: -For the assignment list. 
+  *          -save, upload, load from storage
+  *          -save, upload, load from web server
+  *          -using jsonData
+  *---------------------------------------------------------------------------------------------
+  *Json Data File: 
+  *          - {"objName":"1","index":0}
+  *          - {"objName":"2","index":1}
+  *          - objName: the tuple user insert
+  *          - index: used for order
+  *----------------------------------------------------------------------------------------------
+  */ 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,59 +41,34 @@ using System.Text;
 
 public class AssignmentListManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     public Transform content;
     public Button createButton;
     public GameObject checkListItemPrefab;
-
-
     public InputField input;
 
-
     string filePath;
-    //public Text ShowText;
-    //string jsonName = "AssignmentList.json";
-    string jsonName = "AssignmentList.txt";
+ 
+    string jsonName = "AssignmentList.json";
     private List<AssignmentListObject> AssignmentListObjects = new List<AssignmentListObject>();
 
     public class AssignmentlistItem
     {
         public string objName;
-
         public int index;
-
-
         public AssignmentlistItem(string name, int index)
         {
             this.objName = name;
             this.index = index;
         }
     }
+
     private void Start()
     {
-        /*  #if UNITY_ANDROID
-           filePath = "jar:file://" + Application.dataPath + "!/assets/" + "AssignmentList.json";
-         #endif
-
-         #if UNITY_EDITOR
-            filePath = Application.streamingAssetsPath + "/AssignmentList.json";
-         #endif
-         */
+        //This is for Android device
         filePath = Path.Combine(Application.persistentDataPath, jsonName);
-
         loadJsonData();
-
     }
 
-
-    /* IEnumerator showMessage(){
-
-        ShowText.enabled=true;
-        ShowText.text="This is tooooo much";
-        yield return new WaitForSecondsRealtime(1f);
-        ShowText.enabled=false;
-        ShowText.text="";
-    }*/
     public void CreateNewItem()
     {
         string temp = input.text;
@@ -72,11 +80,8 @@ public class AssignmentListManager : MonoBehaviour
     public void CreateCheckListItems(string name, int loadIndex = 0, bool loading = false)
     {
         GameObject item = Instantiate(checkListItemPrefab);
-
         item.transform.SetParent(content);
-
         AssignmentListObject itemObject = item.GetComponent<AssignmentListObject>();
-
         int index = 0;
         if (!loading)
         {
@@ -92,7 +97,6 @@ public class AssignmentListManager : MonoBehaviour
         {
             saveJsonData();
         }
- 
         upload();
     }
 
@@ -123,7 +127,7 @@ public class AssignmentListManager : MonoBehaviour
     public void upload()
     {
         string contents = "";
-        string url = "http://18.191.23.16/jsonServer/UnityUpload.php";
+        string url = "https://web.cs.dal.ca/~zqiu/UnityAPI/jsonServer/UnityUpload.php";
         for (int i = 0; i < AssignmentListObjects.Count; i++)
         {
             AssignmentlistItem temp = new AssignmentlistItem(AssignmentListObjects[i].objName, AssignmentListObjects[i].index);
@@ -140,6 +144,7 @@ public class AssignmentListManager : MonoBehaviour
     }
 
 
+    //load json data from storage
     void loadJsonData()
     {
         string dataAsJson = "";

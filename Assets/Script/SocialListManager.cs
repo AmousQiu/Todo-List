@@ -1,3 +1,37 @@
+/* 
+ * ------------------------------------------------------------------------------------------
+                                         _____ _                     _                _    _ 
+      /\                                / ____| |                   | |              | |  (_)
+     /  \   _ __ ___   ___  _   _ ___  | |    | |__   ___   ___ ___ | | _____   _____| | ___ 
+    / /\ \ | '_ ` _ \ / _ \| | | / __| | |    | '_ \ / _ \ / __/ _ \| |/ _ \ \ / / __| |/ / |
+   / ____ \| | | | | | (_) | |_| \__ \ | |____| | | | (_) | (_| (_) | | (_) \ V /\__ \   <| |
+  /_/    \_\_| |_| |_|\___/ \__,_|___/  \_____|_| |_|\___/ \___\___/|_|\___/ \_/ |___/_|\_\_|           
+                                                                                                                                                                          
+ * <AmousQiu@dal.ca> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think this stuff is
+ * worth it, you can buy me a beer in return (Personal prefer Garrison Raspberry).
+ *                                                                        @Copyright Ziyu Qiu
+ * ------------------------------------------------------------------------------------------
+ */
+
+ /*-------------------------------------------------------------------------------------------
+  *FILE INTRODUTION PART 
+  *-------------------------------------------------------------------------------------------
+  *FileName: SocialListManager.cs
+  *--------------------------------------------------------------------------------------------
+  *Function: -For the social list. 
+  *          -save, upload, load from storage
+  *          -save, upload, load from web server
+  *          -using jsonData
+  *---------------------------------------------------------------------------------------------
+  *Json Data File: 
+  *          - {"objName":"1","index":0}
+  *          - {"objName":"2","index":1}
+  *          - objName: the tuple user insert
+  *          - index: used for order
+  *----------------------------------------------------------------------------------------------
+  */ 
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,20 +42,14 @@ using System.Text;
 
 public class SocialListManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     public Transform content;
     public Button createButton;
     public GameObject checkListItemPrefab;
-
-    //string filePath=Application.persistentDataPath+"/checkList.txt";
     string filePath;
 
     public InputField input;
 
-    //public Text ShowText;
-
     private List<SocialListObject> SocialListObjects = new List<SocialListObject>();
-
     public class SociallistItem
     {
         public string objName;
@@ -36,24 +64,9 @@ public class SocialListManager : MonoBehaviour
     private void Start()
     {
         filePath = Application.persistentDataPath + "/SocialList.json";
-        //if(!File.Exists(filePath)){
-        //    File.Create(filePath);
-        //}else{}
-        //filePath = Application.streamingAssetsPath + "/SocialList.json";
         loadJsonData();
-        //input = this.GetComponent<InputField>();
-        //createButton.onClick.AddListener(delegate { CreateCheckListItems(input.text); });
     }
 
-
-    /* IEnumerator showMessage(){
-
-        ShowText.enabled=true;
-        ShowText.text="This is tooooo much";
-        yield return new WaitForSecondsRealtime(1f);
-        ShowText.enabled=false;
-        ShowText.text="";
-    }*/
     public void CreateNewItem()
     {
         string temp = input.text;
@@ -85,9 +98,6 @@ public class SocialListManager : MonoBehaviour
         {
             saveJsonData();
         }
-        /* if(checkListObjects.Count>10){
-            showMessage();
-        }*/
         upload();
     }
 
