@@ -127,13 +127,16 @@ public class AssignmentListManager : MonoBehaviour
     public void upload()
     {
         string contents = "";
-        string url = "https://web.cs.dal.ca/~zqiu/UnityAPI/jsonServer/UnityUpload.php";
+        string url = "http://18.191.23.16/TodoList/UnityUpload.php";
         for (int i = 0; i < AssignmentListObjects.Count; i++)
         {
-            AssignmentlistItem temp = new AssignmentlistItem(AssignmentListObjects[i].objName, AssignmentListObjects[i].index);
-            contents += JsonUtility.ToJson(temp) + "\n";
+            //AssignmentlistItem temp = new AssignmentlistItem(AssignmentListObjects[i].objName, AssignmentListObjects[i].index);
+            contents += "*[ ]";
+            contents += AssignmentListObjects[i].objName;
+            contents += "\n";
+            //contents += JsonUtility.ToJson(temp) + "\n";
         }
-
+        Debug.Log(contents);
         byte[] bytes = Encoding.ASCII.GetBytes(contents);
         Debug.Log(bytes.ToString());
 
