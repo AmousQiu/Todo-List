@@ -11,7 +11,7 @@ Includes Three lists:
 >
 >- Shopping List  
 ## APP UI
-<img src="https://github.com/AmousQiu/Todo-List/blob/master/1.jpg" width="300"/>
+<img src="https://github.com/AmousQiu/Todo-List/blob/master/1.jpg" width="200"/>
   
 
 <br>
