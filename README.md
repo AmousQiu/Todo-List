@@ -1,3 +1,5 @@
+Hi there!
+
 # Todo List
 
 This is a minimalist to-do list app made with Unity   
